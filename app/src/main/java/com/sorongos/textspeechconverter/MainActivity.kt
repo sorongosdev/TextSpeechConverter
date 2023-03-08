@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                     else ->
                         message = "알 수 없는 오류"
                 }
-                Toast.makeText(applicationContext, "에러 발생 $message", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "에러 발생 $message", Toast.LENGTH_SHORT).show()
             }
 
             /**UI 업데이트*/

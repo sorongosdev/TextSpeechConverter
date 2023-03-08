@@ -56,11 +56,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:hint="텍스트를 입력해주세요."
+        android:hint="음성이 여기에 표시됩니다."
         android:gravity="top"
         tools:ignore="MissingConstraints" />
     <Button
-        android:text="텍스트를 음성을 변환"
+        android:text="텍스트를 음성으로 변환"
         android:id="@+id/ttsButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toBottomOf="@id/flowButtons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:hint="음성이 여기에 표시됩니다."
+        android:hint="텍스트를 입력해주세요."
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
