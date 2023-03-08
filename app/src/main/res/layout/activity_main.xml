@@ -61,7 +61,7 @@
         tools:ignore="MissingConstraints" />
     <Button
         android:text="텍스트를 음성을 변환"
-        android:id="@+id/TtsButton"
+        android:id="@+id/ttsButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/TtsEditText"

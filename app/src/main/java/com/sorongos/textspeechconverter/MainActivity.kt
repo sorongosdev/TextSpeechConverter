@@ -6,17 +6,20 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.sorongos.textspeechconverter.databinding.ActivityMainBinding
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var speechRecognizer: SpeechRecognizer? = null
     private lateinit var recognitionListener: RecognitionListener
-
+    private var tts: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,22 +31,45 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, packageName)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR") //음성인식 언어 설정
 
-        setListener()
-
+        setSTT()
         binding.playButton.setOnClickListener {
             startSTT()
         }
         binding.stopButton.setOnClickListener {
             stopRecord()
         }
+
+        setTTS()
+        binding.ttsButton.setOnClickListener {
+            startTTS(binding.TtsEditText.text.toString())
+        }
     }
+
+    private fun setTTS() {
+        tts = TextToSpeech(this, TextToSpeech.OnInitListener {
+            if (it == TextToSpeech.SUCCESS) {
+                val result = tts!!.setLanguage(Locale.KOREAN)
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e("TTS", "해당언어는 지원되지 않습니다.")
+                    return@OnInitListener
+                }
+            }
+        })
+
+    }
+
+    private fun startTTS(text: String) {
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+        tts?.playSilentUtterance(750, TextToSpeech.QUEUE_ADD, null)
+    }
+
     private fun stopRecord() {
         speechRecognizer!!.stopListening() //녹음 중지
         Toast.makeText(this, "음성 기록 중지", Toast.LENGTH_SHORT).show()
     }
 
     private fun startSTT() {
-        Toast.makeText(this,"음성 기록 시작",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "음성 기록 시작", Toast.LENGTH_SHORT).show()
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
         speechRecognizer?.setRecognitionListener(recognitionListener)
         speechRecognizer?.startListening(intent)
@@ -58,7 +84,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**RecognitionListener 초기화*/
-    private fun setListener() {
+    private fun setSTT() {
         recognitionListener = object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) =
                 Toast.makeText(this@MainActivity, "음성인식 시작", Toast.LENGTH_SHORT).show()
